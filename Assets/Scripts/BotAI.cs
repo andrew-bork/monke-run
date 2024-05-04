@@ -17,11 +17,16 @@ public class BotAI : MonoBehaviour
 
     public Camera jumpScareCam;
 
-    public float speed, catchDistance, jumpScareTime;
+    public float speed, catchDistance, jumpScareTime, jumpHeight;
 
     public string sceneAfterDeath;
-   
 
+    public Rigidbody rb;
+   
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     void Update()
     {
@@ -29,6 +34,12 @@ public class BotAI : MonoBehaviour
         agent.speed = speed;
         dest = player.position;
         agent.destination = dest;
+        rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
+        if (!agent.hasPath)
+        {
+            Debug.Log("no path");
+            
+        }
         if(distance <= catchDistance)
         {
             player.gameObject.SetActive(false);
