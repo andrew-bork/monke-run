@@ -22,9 +22,13 @@ public class BotAI : MonoBehaviour
     public string sceneAfterDeath;
 
     public Rigidbody rb;
-   
+
+    public bool isGrounded;
+
     private void Start()
     {
+        isGrounded = true;
+        agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -34,13 +38,28 @@ public class BotAI : MonoBehaviour
         agent.speed = speed;
         dest = player.position;
         agent.destination = dest;
-        rb.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
-        if (!agent.hasPath)
+        if (!agent.hasPath && isGrounded)
         {
-            Debug.Log("no path");
+            Debug.Log("ready to jump");
+            if (agent.enabled)
+            {
+                // set the agents target to where you are before the jump
+                // this stops her before she jumps. Alternatively, you could
+                // cache this value, and set it again once the jump is complete
+                // to continue the original move
+                // disable the agent
+                agent.updatePosition = false;
+                agent.updateRotation = false;
+                agent.isStopped = true;
+            }
+            // make the jump
+            rb.isKinematic = false;
+            rb.useGravity = true;
             
+            isGrounded = false;
+            Debug.Log("Jumped");
         }
-        if(distance <= catchDistance)
+        if (distance <= catchDistance)
         {
             player.gameObject.SetActive(false);
             jumpScareCam.gameObject.SetActive(true);
@@ -53,85 +72,27 @@ public class BotAI : MonoBehaviour
         yield return new WaitForSeconds(jumpScareTime);
         SceneManager.LoadScene(sceneAfterDeath);
     }
-    private IEnumerator killPlayer()
+
+   private void OnCollisionEnter(Collision collision)
     {
-        yield return new WaitForSeconds(jumpScareTime);
-        SceneManager.LoadScene(sceneAfterDeath);
-    }
-
-    private bool ShouldJump()
-    {
-        // Check conditions for the bot to jump
-        return isGrounded && !agent.hasPath && Time.time - lastJumpTime >= jumpCooldown;
-    }
-
-
-    private void Jump()
-    {
-        Debug.Log("Jumping");
-
-        // Disable NavMeshAgent control
-        agent.updatePosition = false;
-        agent.updateRotation = false;
-        agent.isStopped = true;
-
-        // Enable Rigidbody control
-        rb.isKinematic = false;
-        rb.useGravity = true;
-
-        Vector3 force = Vector3.up * player.position.y;
-        // Apply an upward force to the Rigidbody
-        rb.AddForce(force, ForceMode.Impulse);
-        lastJumpTime = Time.time;
-    }
-
-    private IEnumerator PushToPlayer()
-    {
-        Debug.Log("Pushed");
-        // Wait for a moment to reach the apex
-        yield return new WaitForSeconds(1); // Adjust the delay as needed
-
-        // Calculate direction towards the player
-        Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0; // Remove vertical component to focus on horizontal movement
-
-        // Face the player
-        transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
-
-        // Adjust force based on bot's mass and desired jump distance
-        float forceMagnitude = speed * rb.mass;
-
-        // Apply horizontal force towards the player
-        rb.AddForce(direction * forceMagnitude, ForceMode.Impulse);
-
-        Debug.Log($"Applying force towards player: {direction * forceMagnitude}");
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("touching ground");
-        agent.Warp(transform.position);
-        // Re-enable NavMeshAgent control
-        agent.updatePosition = true;
-        agent.updateRotation = true;
-        agent.isStopped = false;
-        agent.destination = dest;
-
-        // Disable Rigidbody control
-        rb.isKinematic = false;
-        rb.useGravity = false;
-        isGrounded = true;
-
-        Debug.Log("agent enabled");
-        
-    }
-    private void OnCollisionExit(Collision collision)
-    {
-        Debug.Log("left ground");
-        if (collision.collider != null && collision.collider.CompareTag("Floor"))
+        if (collision.collider != null && collision.collider.tag == "Floor")
         {
-            isGrounded = false;
-            StartCoroutine(PushToPlayer());
+            if (!isGrounded)
+            {
+                if (agent.enabled)
+                {
+                    agent.updatePosition = true;
+                    agent.updateRotation = true;
+                    agent.isStopped = false;
+                }
+                rb.isKinematic = true;
+                rb.useGravity = false;
+                isGrounded = true;
+                agent.destination = dest;
+
+                Debug.Log("agent enabled");
+            }
         }
     }
+   
 }
