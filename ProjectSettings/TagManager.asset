@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bot
+  - Anchor
+  - Floor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - 
