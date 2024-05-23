@@ -11,7 +11,7 @@ public class BotAI : MonoBehaviour
     public Camera jumpScareCam;
     public Rigidbody rb;
 
-    public float speed, catchDistance, jumpScareTime, jumpHeight, jumpCooldown = 2f;
+    public float speed, catchDistance, jumpScareTime, jumpCooldown = 2f;
     public string sceneAfterDeath;
     public bool isGrounded;
 
@@ -38,13 +38,13 @@ public class BotAI : MonoBehaviour
             Jump();
         }
 
-        /*if (distance <= catchDistance)
+        if (distance <= catchDistance)
         {
             player.gameObject.SetActive(false);
             jumpScareCam.gameObject.SetActive(true);
             StartCoroutine(killPlayer());
         }
-        */
+        
     }
     private IEnumerator killPlayer()
     {
@@ -72,7 +72,7 @@ public class BotAI : MonoBehaviour
         rb.isKinematic = false;
         rb.useGravity = true;
 
-        Vector3 force = Vector3.up * jumpHeight;
+        Vector3 force = Vector3.up * player.position.y;
         // Apply an upward force to the Rigidbody
         rb.AddForce(force, ForceMode.Impulse);
         lastJumpTime = Time.time;
