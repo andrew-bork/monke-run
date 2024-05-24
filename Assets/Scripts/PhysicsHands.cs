@@ -79,7 +79,7 @@ public class PhysicsHands : MonoBehaviour
         float drag = GetDrag();
 
         playerRigidBody.AddForce(force, ForceMode.Acceleration);
-        playerRigidBody.AddForce(drag * -playerRigidBody.velocity * climbDrag);
+        playerRigidBody.AddForce(drag * -playerRigidBody.velocity * climbDrag, ForceMode.Acceleration);
     }
 
 
