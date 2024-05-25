@@ -21,7 +21,10 @@ PluginImporter:
     second:
       enabled: 1
       settings:
+<<<<<<< HEAD
         CPU: x86_64
+=======
+>>>>>>> Enemy-AI-and-Environment
         DefaultValueInitialized: true
   userData: 
   assetBundleName: 

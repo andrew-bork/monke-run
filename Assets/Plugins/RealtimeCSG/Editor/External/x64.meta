@@ -1,8 +1,14 @@
 fileFormatVersion: 2
 guid: 9ba2325ffd8919c49acafc2ee5cbd7e4
 folderAsset: yes
+<<<<<<< HEAD
 DefaultImporter:
   externalObjects: {}
+=======
+timeCreated: 1440407140
+licenseType: Store
+DefaultImporter:
+>>>>>>> Enemy-AI-and-Environment
   userData: 
   assetBundleName: 
   assetBundleVariant: 
