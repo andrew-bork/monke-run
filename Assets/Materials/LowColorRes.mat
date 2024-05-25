@@ -128,7 +128,7 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - _enable: 1
+    - _enable: 0
     - _pixel_size: 800
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
