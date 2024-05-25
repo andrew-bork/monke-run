@@ -42,6 +42,8 @@ public class BotAI : MonoBehaviour
         {
             player.gameObject.SetActive(false);
             jumpScareCam.gameObject.SetActive(true);
+            agent.speed = 0;
+            agent.isStopped = true;
             StartCoroutine(killPlayer());
         }
         

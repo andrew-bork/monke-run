@@ -19,40 +19,37 @@ class MonkeAnimator : MonoBehaviour
     public MonkeAnimator(Animator _animator)
     {
         animator = _animator;
-        isMovingHash = Animator.StringToHash("isMoving");
-        isRunningHash = Animator.StringToHash("isRunning");
-        chestPoundHash = Animator.StringToHash("triggerPound");
     }
 
     public void run()
     {
-        animator.SetBool(isMovingHash, true);
-        animator.SetBool(isRunningHash, true);
+        animator.SetBool("isMoving", true);
+        animator.SetBool("isRunning", true);
     }
 
     public void walk()
     {
-        animator.SetBool(isMovingHash, true);
-        animator.SetBool(isRunningHash, false);
+        animator.SetBool("isMoving", true);
+        animator.SetBool("isRunning", false);
 
     }
 
     public void chestPound()
     {
-        animator.SetTrigger(chestPoundHash);
+        animator.SetTrigger("triggerPound");
     }
 
     public void idle()
     {
-        animator.SetBool(isMovingHash, false);
-        animator.SetBool(isRunningHash, false);
+        animator.SetBool("isMoving", false);
+        animator.SetBool("isRunning", false);
     }
 
 
     void Update()
     {
 
-        if (agent.velocity.magnitude > runSpeed)
+        if (agent.speed > runSpeed)
         {
             run();
         }
