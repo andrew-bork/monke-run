@@ -3,50 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BotAI : MonoBehaviour
+class MonkeAnimator : MonoBehaviour
 {
     public NavMeshAgent agent;
 
     public Transform player;
     public Animator animator;
 
-    MonkeAnimator monkeAnimator;
-    Vector3 dest;
-
     public float speed;
     public float runSpeed = 0.5f;
 
-
-
-
-    private void Start()
-    {
-
-        agent.speed = speed;
-        monkeAnimator = new MonkeAnimator(animator);
-    }
-
-    void Update()
-    {
-        agent.destination = dest = player.position;
-        
-        if(agent.velocity.magnitude > runSpeed)
-        {
-            monkeAnimator.run();
-        }else if(agent.velocity.magnitude > 0.01f)
-        {
-            monkeAnimator.walk();
-        }else
-        {
-            monkeAnimator.idle();
-        }
-    }
-}
-
-
-class MonkeAnimator
-{
-    Animator animator;
     int isMovingHash;
     int isRunningHash;
     int chestPoundHash;
@@ -80,5 +46,23 @@ class MonkeAnimator
     {
         animator.SetBool(isMovingHash, false);
         animator.SetBool(isRunningHash, false);
+    }
+
+
+    void Update()
+    {
+
+        if (agent.velocity.magnitude > runSpeed)
+        {
+            run();
+        }
+        else if (agent.velocity.magnitude > 0.01f)
+        {
+            walk();
+        }
+        else
+        {
+            idle();
+        }
     }
 }
